@@ -1,0 +1,12 @@
+{
+  "name": "kai-netz",
+  "version": "1.0.0",
+  "description": "Kai-Netz desktop dashboard",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^YOUR_VERSION"
+  }
+}
