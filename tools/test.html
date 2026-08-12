@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="../style.css" />
+    <title>Test Page · Kai-Netz</title>
+  </head>
+  <body>
+    <main class="container">
+      <div class="topbar">
+        <a class="back" href="../index.html">← Kai-Netz</a
+        ><span>🧪 Test Page</span>
+      </div>
+      <p class="eyebrow">HTML / CSS / JS</p>
+      <h1>Test Page</h1>
+      <p class="subtitle">
+        Kleiner Spielplatz zum Testen von HTML und JavaScript.
+      </p>
+      <div class="card">
+        <textarea id="code" style="min-height: 260px">
+<h1>Hello Kai 👋</h1><p>Das funktioniert!</p></textarea
+        ><br /><br /><button id="run">▶ Ausführen</button>
+      </div>
+      <div class="card">
+        <h2>Preview</h2>
+        <iframe
+          id="preview"
+          style="
+            width: 100%;
+            height: 260px;
+            background: white;
+            border: 0;
+            border-radius: 9px;
+          "
+        ></iframe>
+      </div>
+      <footer>Kai-Netz · Test Page</footer>
+    </main>
+    <script>
+      const c = document.getElementById("code"),
+        p = document.getElementById("preview");
+      document.getElementById("run").onclick = () => (p.srcdoc = c.value);
+    </script>
+  </body>
+</html>

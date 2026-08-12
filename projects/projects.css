@@ -1,0 +1,5 @@
+.form{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:10px}
+.project h2{font-size:18px;margin-bottom:8px}.meta{color:#888;font-size:13px;margin-bottom:12px}
+.bar{height:8px;background:#0d0f12;border-radius:99px;overflow:hidden;border:1px solid #252a31}
+.fill{height:100%;background:#777}.project-actions{margin-top:14px}
+@media(max-width:700px){.form{grid-template-columns:1fr}.container{padding-top:25px}}

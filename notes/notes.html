@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="./notes.css" />
+    <title>Notes · Kai-Netz</title>
+  </head>
+  <body>
+    <main class="container">
+      <div class="topbar">
+        <a class="back" href="../index.html">← Kai-Netz</a><span>📝 Notes</span>
+      </div>
+      <p class="eyebrow">PERSONAL NOTES</p>
+      <h1>Notizen</h1>
+      <p class="subtitle">
+        Deine Notizen bleiben lokal im Browser gespeichert.
+      </p>
+      <div class="card">
+        <input id="title" placeholder="Titel der Notiz" />
+        <textarea
+          id="content"
+          class="editor"
+          placeholder="Schreib hier deine Notiz..."
+        ></textarea>
+        <div class="actions">
+          <button id="save">Speichern</button><button id="clear">Leeren</button
+          ><span id="status"></span>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Gespeicherte Notiz</h2>
+        <p id="preview">Noch keine Notiz.</p>
+      </div>
+      <footer>Kai-Netz · Notes</footer>
+    </main>
+    <script src="./notes.js"></script>
+  </body>
+</html>

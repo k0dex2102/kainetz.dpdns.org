@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="../style.css" />
+    <title>Dev Tools · Kai-Netz</title>
+  </head>
+  <body>
+    <main class="container">
+      <div class="topbar">
+        <a class="back" href="../index.html">← Kai-Netz</a
+        ><span>🔧 Dev Tools</span>
+      </div>
+      <p class="eyebrow">DEVELOPER TOOLBOX</p>
+      <h1>Dev Tools</h1>
+      <p class="subtitle">Kleine Werkzeuge für den Alltag.</p>
+      <div class="card">
+        <h2>UUID Generator</h2>
+        <input id="uuid" readonly /><br /><br /><button
+          onclick="uuid.value = crypto.randomUUID()"
+        >
+          Generieren
+        </button>
+      </div>
+      <div class="card">
+        <h2>JSON Formatter</h2>
+        <textarea
+          id="json"
+          style="min-height: 180px"
+          placeholder='{"name":"Kai","project":"Kai-Netz"}'
+        ></textarea
+        ><br /><br /><button onclick="formatJson()">Formatieren</button>
+      </div>
+      <footer>Kai-Netz · Dev Tools</footer>
+    </main>
+    <script>
+      function formatJson() {
+        try {
+          json.value = JSON.stringify(JSON.parse(json.value), null, 2);
+        } catch (e) {
+          alert("Ungültiges JSON");
+        }
+      }
+    </script>
+  </body>
+</html>

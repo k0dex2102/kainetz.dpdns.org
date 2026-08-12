@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="../style.css" />
+    <title>Network · Kai-Netz</title>
+  </head>
+  <body>
+    <main class="container">
+      <div class="topbar">
+        <a class="back" href="../index.html">← Kai-Netz</a
+        ><span>🌐 Network</span>
+      </div>
+      <p class="eyebrow">CONNECTION INFO</p>
+      <h1>Network</h1>
+      <p class="subtitle">
+        Informationen über deine aktuelle Browser-Verbindung.
+      </p>
+      <div class="card">
+        <h2>Status</h2>
+        <p id="online" style="font-size: 22px; margin-top: 12px">Prüfe...</p>
+      </div>
+      <div class="card">
+        <h2>Browser</h2>
+        <p
+          id="info"
+          style="color: #aaa; line-height: 1.8; margin-top: 12px"
+        ></p>
+      </div>
+      <footer>Kai-Netz · Network</footer>
+    </main>
+    <script>
+      function update() {
+        online.textContent = navigator.onLine ? "🟢 Online" : "🔴 Offline";
+      }
+      info.innerHTML = `Sprache: ${navigator.language}<br>Plattform: ${navigator.platform}<br>Bildschirm: ${screen.width} × ${screen.height}<br>Verbindung: ${navigator.connection?.effectiveType || "unbekannt"}`;
+      update();
+      addEventListener("online", update);
+      addEventListener("offline", update);
+    </script>
+  </body>
+</html>

@@ -16,27 +16,16 @@ body {
   top: 20px;
   left: 20px;
 }
+
 #back a {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 11px 16px;
-  color: #cfd3da;
-  background: #181b21;
-  border: 1px solid #2a2f38;
-  border-radius: 10px;
+  color: #aaa;
   text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
+  font-size: 16px;
+  transition: color 0.2s ease;
 }
+
 #back a:hover {
-  background: #20242c;
-  border-color: #3b424e;
-  transform: translateY(-2px);
+  color: #fff;
 }
 .calculator {
   width: 340px;

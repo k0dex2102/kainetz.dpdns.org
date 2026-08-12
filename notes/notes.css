@@ -1,0 +1,21 @@
+.editor {
+  min-height: 320px;
+  margin-top: 15px;
+  resize: vertical;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+.actions span {
+  color: #777;
+  font-size: 13px;
+}
+#preview {
+  white-space: pre-wrap;
+  color: #bbb;
+  margin-top: 12px;
+  line-height: 1.6;
+}
