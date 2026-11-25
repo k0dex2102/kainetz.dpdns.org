@@ -1,1 +1,269 @@
 
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schulden | Kai-Netz</title>
+<style>
+* {box-sizing:border-box;margin:0;padding:0}
+body {
+  background:#0d0f12;color:#f1f1f1;
+  font-family:Arial,sans-serif;min-height:100vh;
+}
+.container {width:min(900px,90%);margin:auto;padding:45px 0}
+.back {color:#999;text-decoration:none}
+.back:hover {color:white}
+header {margin:30px 0}
+.eyebrow {color:#777;font-size:12px;letter-spacing:3px;margin-bottom:10px}
+h1 {font-size:36px;margin-bottom:10px}
+.subtitle {color:#888}
+.card {
+  background:#15181d;border:1px solid #252a31;
+  border-radius:14px;padding:24px;margin-bottom:20px;
+}
+.stats {display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.stat {color:#999;font-size:14px}
+.stat strong {display:block;color:white;font-size:28px;margin-top:10px}
+label {display:block;color:#aaa;font-size:13px;margin:15px 0 8px}
+input,textarea {
+  width:100%;padding:13px;background:#0d0f12;
+  color:white;border:1px solid #30353d;
+  border-radius:9px;font:inherit;
+}
+textarea {resize:vertical;min-height:65px}
+button {
+  padding:11px 16px;border:1px solid #333941;
+  background:#242a32;color:white;border-radius:9px;
+  cursor:pointer;font:inherit;
+}
+button:hover {background:#343b46}
+.primary {background:#315bba;border-color:#315bba}
+.primary:hover {background:#416dcc}
+.form-buttons {display:flex;gap:10px;margin-top:18px}
+.person {
+  padding:18px 0;border-bottom:1px solid #292e36;
+}
+.person:last-child {border:0}
+.person-top {display:flex;justify-content:space-between;gap:12px}
+.person h3 {font-size:17px}
+.amount {font-size:19px;font-weight:bold}
+.note {color:#888;font-size:13px;margin-top:8px}
+.actions {display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.actions button {font-size:12px;padding:8px 11px}
+.paid {color:#64d69a}
+.empty {color:#777;text-align:center;padding:25px}
+footer {text-align:center;color:#555;margin-top:30px;font-size:13px}
+@media(max-width:550px) {
+  .stats {grid-template-columns:1fr}
+  .person-top {flex-direction:column}
+  h1 {font-size:30px}
+}
+</style>
+</head>
+<body>
+<main class="container">
+
+<a class="back" href="./index.html">← Zurück zum Dashboard</a>
+
+<header>
+  <p class="eyebrow">KAI-NETZ · FINANZEN</p>
+  <h1>💸 Schuldenverwaltung</h1>
+  <p class="subtitle">Behalte den Überblick über dein geliehenes Geld.</p>
+</header>
+
+<section class="stats">
+  <div class="card stat">
+    Insgesamt offen
+    <strong id="total">0,00 €</strong>
+  </div>
+  <div class="card stat">
+    Offene Personen
+    <strong id="count">0</strong>
+  </div>
+</section>
+
+<section class="card">
+  <h2 id="formTitle">Person hinzufügen</h2>
+
+  <form id="debtForm">
+    <label for="name">Name der Person</label>
+    <input id="name" placeholder="z.B. Max" required maxlength="80">
+
+    <label for="amount">Betrag in Euro</label>
+    <input id="amount" type="number" min="0.01"
+      step="0.01" placeholder="z.B. 50.00" required>
+
+    <label for="note">Notiz (optional)</label>
+    <textarea id="note" placeholder="Wofür ist das Geld?"></textarea>
+
+    <div class="form-buttons">
+      <button class="primary" type="submit" id="saveBtn">
+        + Hinzufügen
+      </button>
+      <button type="button" id="cancelBtn" hidden>
+        Abbrechen
+      </button>
+    </div>
+  </form>
+</section>
+
+<section class="card">
+  <h2>Meine Schulden</h2>
+  <div id="list"></div>
+</section>
+
+<footer>Kai-Netz · Private Schuldenverwaltung</footer>
+</main>
+
+<script>
+const STORAGE_KEY = "kai-schulden";
+
+let debts = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+let editingId = null;
+
+const form = document.getElementById("debtForm");
+const nameInput = document.getElementById("name");
+const amountInput = document.getElementById("amount");
+const noteInput = document.getElementById("note");
+const list = document.getElementById("list");
+
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(debts));
+  render();
+}
+
+function money(value) {
+  return Number(value).toLocaleString("de-DE", {
+    style:"currency", currency:"EUR"
+  });
+}
+
+function element(tag, className, text) {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  if (text !== undefined) el.textContent = text;
+  return el;
+}
+
+function render() {
+  const open = debts.filter(d => !d.paid);
+
+  document.getElementById("total").textContent =
+    money(open.reduce((sum,d) => sum + Number(d.amount),0));
+
+  document.getElementById("count").textContent = open.length;
+
+  list.replaceChildren();
+
+  if (debts.length === 0) {
+    list.append(element("p","empty","Du hast noch keine Schulden eingetragen."));
+    return;
+  }
+
+  debts.forEach(debt => {
+    const item = element("div","person");
+    const top = element("div","person-top");
+    const info = element("div");
+    const amount = element("div","amount",money(debt.amount));
+
+    info.append(element("h3","",debt.name));
+    info.append(element("p","note",debt.note || "Keine Notiz"));
+
+    if (debt.paid) {
+      amount.classList.add("paid");
+      amount.textContent += " ✓";
+    }
+
+    top.append(info,amount);
+    item.append(top);
+
+    const actions = element("div","actions");
+
+    const paidBtn = element("button","",
+      debt.paid ? "↩ Wieder öffnen" : "✓ Bezahlt");
+    paidBtn.onclick = () => {
+      debt.paid = !debt.paid;
+      save();
+    };
+
+    const editBtn = element("button","","✏ Bearbeiten");
+    editBtn.onclick = () => editDebt(debt.id);
+
+    const deleteBtn = element("button","","🗑 Löschen");
+    deleteBtn.onclick = () => {
+      if (confirm("Diesen Eintrag wirklich löschen?")) {
+        debts = debts.filter(d => d.id !== debt.id);
+        if (editingId === debt.id) resetForm();
+        save();
+      }
+    };
+
+    actions.append(paidBtn,editBtn,deleteBtn);
+    item.append(actions);
+    list.append(item);
+  });
+}
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+
+  const name = nameInput.value.trim();
+  const amount = Number(amountInput.value);
+
+  if (!name || !Number.isFinite(amount) || amount <= 0) return;
+
+  if (editingId !== null) {
+    const debt = debts.find(d => d.id === editingId);
+    if (debt) {
+      debt.name = name;
+      debt.amount = amount;
+      debt.note = noteInput.value.trim();
+    }
+  } else {
+    debts.push({
+      id: crypto.randomUUID(),
+      name,
+      amount,
+      note: noteInput.value.trim(),
+      paid:false
+    });
+  }
+
+  resetForm();
+  save();
+});
+
+function editDebt(id) {
+  const debt = debts.find(d => d.id === id);
+  if (!debt) return;
+
+  editingId = id;
+  nameInput.value = debt.name;
+  amountInput.value = debt.amount;
+  noteInput.value = debt.note || "";
+
+  document.getElementById("formTitle").textContent = "Eintrag bearbeiten";
+  document.getElementById("saveBtn").textContent = "Speichern";
+  document.getElementById("cancelBtn").hidden = false;
+
+  document.getElementById("formTitle").scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+function resetForm() {
+  editingId = null;
+  form.reset();
+  document.getElementById("formTitle").textContent = "Person hinzufügen";
+  document.getElementById("saveBtn").textContent = "+ Hinzufügen";
+  document.getElementById("cancelBtn").hidden = true;
+}
+
+document.getElementById("cancelBtn").onclick = resetForm;
+
+render();
+</script>
+</body>
+</html>
